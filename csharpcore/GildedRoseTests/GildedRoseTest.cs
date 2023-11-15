@@ -8,9 +8,11 @@ namespace GildedRoseTests;
 public class GildedRoseTest
 {
     [Test]
-    [TestCase(1, 0)]
-    [TestCase(-1, 1)]
-    public void AllItems_QualityNeverDropsBelowZero(int sellIn, int quality)
+    [TestCase("test",1, 0)]
+    [TestCase("test",-1, 1)]
+    [TestCase(ItemNames.TAFKAL80ETCBackstagePass, 0, 1)]
+    [TestCase(ItemNames.TAFKAL80ETCBackstagePass, 1, 1)]
+    public void AllItems_QualityNeverDropsBelowZero(string itemName, int sellIn, int quality)
     {
         var items = new List<Item> { new Item { Name = "test", SellIn = sellIn, Quality = quality } };
         var sut = new GildedRose(items);
