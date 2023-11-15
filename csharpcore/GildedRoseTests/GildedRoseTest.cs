@@ -153,7 +153,6 @@ public class GildedRoseTest
     }
 
     [Test]
-    [TestCase(0, 10)]
     [TestCase(1, 10)]
     [TestCase(2, 10)]
     public void Conjured_QualityDropsByTwoBeforeSellIn(int sellIn, int quality)
