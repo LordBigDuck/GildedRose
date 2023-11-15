@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GildedRoseKata;
 
@@ -13,77 +14,93 @@ public class GildedRose
 
     public void UpdateQuality()
     {
-        for (var i = 0; i < _items.Count; i++)
+        foreach (var item in _items)
         {
-            if (_items[i].Name != ItemNames.AgedBrie && _items[i].Name != ItemNames.TAFKAL80ETCBackstagePass)
+            item.Quality = GetNewQuality(item);
+            
+            if (item.Name != ItemNames.Sulfuras)
             {
-                if (_items[i].Quality > Quality.Min)
-                {
-                    if (_items[i].Name != ItemNames.Sulfuras)
-                    {
-                        _items[i].Quality = _items[i].Quality - 1;
-                    }
-                }
-            }
-            else
-            {
-                if (_items[i].Quality < Quality.Max)
-                {
-                    _items[i].Quality = _items[i].Quality + 1;
-
-                    if (_items[i].Name == ItemNames.TAFKAL80ETCBackstagePass)
-                    {
-                        if (_items[i].SellIn < 11)
-                        {
-                            if (_items[i].Quality < Quality.Max)
-                            {
-                                _items[i].Quality = _items[i].Quality + 1;
-                            }
-                        }
-
-                        if (_items[i].SellIn < 6)
-                        {
-                            if (_items[i].Quality < Quality.Max)
-                            {
-                                _items[i].Quality = _items[i].Quality + 1;
-                            }
-                        }
-                    }
-                }
+                item.SellIn -= SellIn.DecrementValue;
             }
 
-            if (_items[i].Name != ItemNames.Sulfuras)
+            if (item.SellIn < 0)
             {
-                _items[i].SellIn = _items[i].SellIn - 1;
-            }
-
-            if (_items[i].SellIn < 0)
-            {
-                if (_items[i].Name != ItemNames.AgedBrie)
+                if (item.Name != ItemNames.AgedBrie)
                 {
-                    if (_items[i].Name != ItemNames.TAFKAL80ETCBackstagePass)
+                    if (item.Name != ItemNames.TAFKAL80ETCBackstagePass)
                     {
-                        if (_items[i].Quality > 0)
+                        if (item.Quality > 0)
                         {
-                            if (_items[i].Name != ItemNames.Sulfuras)
+                            if (item.Name != ItemNames.Sulfuras)
                             {
-                                _items[i].Quality = _items[i].Quality - 1;
+                                item.Quality = item.Quality - 1;
                             }
                         }
                     }
                     else
                     {
-                        _items[i].Quality = _items[i].Quality - _items[i].Quality;
+                        item.Quality = item.Quality - item.Quality;
                     }
                 }
                 else
                 {
-                    if (_items[i].Quality < Quality.Max)
+                    if (item.Quality < Quality.Max)
                     {
-                        _items[i].Quality = _items[i].Quality + 1;
+                        item.Quality = item.Quality + 1;
                     }
                 }
             }
         }
+    }
+
+    private static int GetTotalQualityToDecrease(Item item)
+    {
+        if (item.Quality > Quality.Min)
+        {
+            if (item.Name != ItemNames.Sulfuras)
+            {
+                return 1;
+            }
+        }
+    
+        return 0;
+    }
+    
+    private static int GetNewQuality(Item item)
+        => item.Name switch
+        {
+            ItemNames.Sulfuras => item.Quality + 0,
+            ItemNames.AgedBrie => item.Quality + GetQualityIncrementOfBasicItem(item),
+            ItemNames.TAFKAL80ETCBackstagePass => item.Quality + GetTotalQualityToIncreaseOfBackstagePass(item),
+    
+            _ => item.Quality - GetTotalQualityToDecrease(item)
+        };
+
+    private static int GetQualityIncrement(int quality, int toAdd)
+        => quality + toAdd > Quality.Max
+            ? Quality.Max - quality
+            : toAdd;
+
+    private static int GetQualityIncrementOfBasicItem(Item item)
+        => GetQualityIncrement(item.Quality, Quality.BaseIncrement);
+    
+    private static int GetTotalQualityToIncreaseOfBackstagePass(Item item)
+    {
+        if (!item.Name.Equals(ItemNames.TAFKAL80ETCBackstagePass, StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new Exception("Wrong item");
+        }
+    
+        var total = Quality.BaseIncrement;
+        if (item.SellIn <= 10)
+        {
+            total += 1;
+            if (item.SellIn <= 5)
+            {
+                total += 1;
+            }
+        }
+
+        return GetQualityIncrement(item.Quality, total);
     }
 }
