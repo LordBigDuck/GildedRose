@@ -17,7 +17,7 @@ public class GildedRose
         {
             if (_items[i].Name != ItemNames.AgedBrie && _items[i].Name != ItemNames.TAFKAL80ETCBackstagePass)
             {
-                if (_items[i].Quality > 0)
+                if (_items[i].Quality > Quality.Min)
                 {
                     if (_items[i].Name != ItemNames.Sulfuras)
                     {
@@ -27,7 +27,7 @@ public class GildedRose
             }
             else
             {
-                if (_items[i].Quality < 50)
+                if (_items[i].Quality < Quality.Max)
                 {
                     _items[i].Quality = _items[i].Quality + 1;
 
@@ -35,7 +35,7 @@ public class GildedRose
                     {
                         if (_items[i].SellIn < 11)
                         {
-                            if (_items[i].Quality < 50)
+                            if (_items[i].Quality < Quality.Max)
                             {
                                 _items[i].Quality = _items[i].Quality + 1;
                             }
@@ -43,7 +43,7 @@ public class GildedRose
 
                         if (_items[i].SellIn < 6)
                         {
-                            if (_items[i].Quality < 50)
+                            if (_items[i].Quality < Quality.Max)
                             {
                                 _items[i].Quality = _items[i].Quality + 1;
                             }
@@ -57,7 +57,7 @@ public class GildedRose
                 _items[i].SellIn = _items[i].SellIn - 1;
             }
 
-            if (_items[i].SellIn < 0)
+            if (_items[i].SellIn < Quality.Min)
             {
                 if (_items[i].Name != ItemNames.AgedBrie)
                 {
@@ -78,7 +78,7 @@ public class GildedRose
                 }
                 else
                 {
-                    if (_items[i].Quality < 50)
+                    if (_items[i].Quality < Quality.Max)
                     {
                         _items[i].Quality = _items[i].Quality + 1;
                     }

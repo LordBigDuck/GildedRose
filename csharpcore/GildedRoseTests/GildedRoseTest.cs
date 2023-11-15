@@ -81,7 +81,7 @@ public class GildedRoseTest
 
         var itemToTest = items[0];
         itemToTest.SellIn.Should().Be(sellIn - 1);
-        itemToTest.Quality.Should().Be(Quality.MaxQuality);
+        itemToTest.Quality.Should().Be(Quality.Max);
     }
 
     [Test]
