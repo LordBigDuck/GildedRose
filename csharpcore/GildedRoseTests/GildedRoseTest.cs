@@ -151,4 +151,33 @@ public class GildedRoseTest
         var itemToTest = items[0];
         itemToTest.Quality.Should().Be(0);
     }
+
+    [Test]
+    [TestCase(0, 10)]
+    [TestCase(1, 10)]
+    [TestCase(2, 10)]
+    public void Conjured_QualityDropsByTwoBeforeSellIn(int sellIn, int quality)
+    {
+        var items = new List<Item> { new Item { Name = ItemNames.Conjured, SellIn = sellIn, Quality = quality } };
+        var sut = new GildedRose(items);
+        
+        sut.UpdateQuality();
+
+        var itemToTest = items[0];
+        itemToTest.Quality.Should().Be(quality - 2);
+    }
+    
+    [Test]
+    [TestCase(-1, 10)]
+    [TestCase(-2, 10)]
+    public void Conjured_QualityDropsByFourAfterSellIn(int sellIn, int quality)
+    {
+        var items = new List<Item> { new Item { Name = ItemNames.Conjured, SellIn = sellIn, Quality = quality } };
+        var sut = new GildedRose(items);
+        
+        sut.UpdateQuality();
+
+        var itemToTest = items[0];
+        itemToTest.Quality.Should().Be(quality - 4);
+    }
 }
