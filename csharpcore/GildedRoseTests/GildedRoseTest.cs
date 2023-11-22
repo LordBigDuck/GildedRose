@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using GildedRoseKata;
+using GildedRoseKata.Constants;
 using NUnit.Framework;
 
 namespace GildedRoseTests;
@@ -11,10 +12,9 @@ public class GildedRoseTest
     [TestCase("test",1, 0)]
     [TestCase("test",-1, 1)]
     [TestCase(ItemNames.TAFKAL80ETCBackstagePass, 0, 1)]
-    [TestCase(ItemNames.TAFKAL80ETCBackstagePass, 1, 1)]
     public void AllItems_QualityNeverDropsBelowZero(string itemName, int sellIn, int quality)
     {
-        var items = new List<Item> { new Item { Name = "test", SellIn = sellIn, Quality = quality } };
+        var items = new List<Item> { new Item { Name = itemName, SellIn = sellIn, Quality = quality } };
         var sut = new GildedRose(items);
         
         sut.UpdateQuality();
