@@ -11,6 +11,7 @@ public static class QualityCalculator
             ItemNames.Sulfuras => item.Quality,
             ItemNames.AgedBrie => ComputeBasicItemIncreasingQuality(item, Quality.BaseIncrement, Quality.Max),
             ItemNames.TAFKAL80ETCBackstagePass => ComputeBackstagePassQuality(item, Quality.Max),
+            ItemNames.Conjured => ComputeBasicItemQuality(item, Quality.ConjuredIncrement, Quality.Min),
     
             _ => ComputeBasicItemQuality(item, Quality.BaseIncrement, Quality.Min)
         };
